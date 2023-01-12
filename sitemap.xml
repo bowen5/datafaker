@@ -46,6 +46,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://www.datafaker.net/documentation/performance170/</loc>
+         <lastmod>2023-01-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://www.datafaker.net/documentation/providers/</loc>
          <lastmod>2023-01-12</lastmod>
          <changefreq>daily</changefreq>
