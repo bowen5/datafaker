@@ -25,10 +25,10 @@ public class FakeAnnotationTest {
 
     @Test
     void shouldGenerateEntityFromJavaRecordWithDefaultSchema() {
-        var client = Faker.populate(PersonJavaRecord.class);
+        var person = Faker.populate(PersonJavaRecord.class);
 
-        assertThat(client).isNotNull();
-        assertThat(client.name()).isEqualTo("Dr Alexis Noël");
+        assertThat(person).isNotNull();
+        assertThat(person.name()).isEqualTo("Dr Alexis Noël");
     }
 
     @Test
@@ -41,10 +41,10 @@ public class FakeAnnotationTest {
 
     @Test
     void shouldGenerateEntityFromJavaRecordWithCustomSchema() {
-        var client = Faker.populate(PersonJavaRecord.class, customSchema());
+        var person = Faker.populate(PersonJavaRecord.class, customSchema());
 
-        assertThat(client).isNotNull();
-        assertThat(client.name()).isEqualTo("Wildfire Woman");
+        assertThat(person).isNotNull();
+        assertThat(person.name()).isEqualTo("Wildfire Woman");
     }
 
     @Test
@@ -61,6 +61,16 @@ public class FakeAnnotationTest {
 
         assertThat(person).isNotNull();
         assertThat(person.name).isEqualTo("Wildfire Woman");
+    }
+
+    @Test
+    void shouldGenerateEntityFromJavaRecordWithComplexSchemaWhenClassTemplateWithoutAnnotation() {
+        var person = Faker.populate(ComplexPersonJavaRecord.class, complexSchema());
+
+        assertThat(person).isNotNull();
+        assertThat(person.name).isEqualTo("Wildfire Woman");
+        assertThat(person.address).isEqualTo("Am Buttermarkt 46b, Dannerheim, BE 32422");
+        assertThat(person.color).isEqualTo("rot");
     }
 
     @Test
@@ -89,6 +99,15 @@ public class FakeAnnotationTest {
         return Schema.of(field("name", () -> faker.superhero().name()));
     }
 
+    public static Schema<Object, ?> complexSchema() {
+        var faker = new Faker(Locale.forLanguageTag("de-en"), new RandomService(new Random(1)));
+        return Schema.of(
+            field("name", () -> faker.superhero().name()),
+            field("address", () -> faker.address().fullAddress()),
+            field("color", () -> faker.color().name())
+        );
+    }
+
     @FakeForSchema("defaultSchema")
     public static class DefaultPerson {
 
@@ -104,4 +123,6 @@ public class FakeAnnotationTest {
     public record DefaultPersonJavaRecord(String name) { }
 
     public record SimplePersonJavaRecord(String name) { }
+
+    public record ComplexPersonJavaRecord(String name, String address, String color) { }
 }
